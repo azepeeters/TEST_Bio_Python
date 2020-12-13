@@ -1,7 +1,5 @@
 
 
-import string
-
 # Source of amino acid masses (average))
 # http://education.expasy.org/student_projects/isotopident/htdocs/aa-list.html
 
