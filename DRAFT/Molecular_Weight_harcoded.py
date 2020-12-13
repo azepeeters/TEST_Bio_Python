@@ -35,6 +35,6 @@ Protein = 'DHPFWKQTACKHV'
 weight = sum(weights[p] for p in Protein)
 
 # Here we print the result -> The result seems close to the mass on the teachers' notes
-print ("The molecular weight of this protein is", weight)
+print ("The molecular weight of protein " + Protein + " is " + str(weight) )
 
 
