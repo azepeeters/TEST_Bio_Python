@@ -80,54 +80,50 @@ for seq_record in SeqIO.parse(open(file_2, mode='r'), 'fasta'):
     # For each sequence found, insert it in the lsit
     list_sequence_parts.insert(0, str(seq_record.seq))
 
-print('Total of sequence parts that could be used to re-build it  : ' + str(len(list_sequence_parts)))
 
-print('List of sequences :')
+
+print('Total of unique sequence parts that could be used to re-build the protein  : ' + str(len(list_sequence_parts)))
+
+print('The list of these sequences is :')
 print(list_sequence_parts)
 
 
 
 ##########################################################
-# Build a list containing all possible combinations of sequences
+# Generate all possible combinations of the sequences, and compute the weight of each combinations
+#   For each combination, assess if its weight matches the total proteins weight
 ##########################################################
 
 
 import itertools
 
-# Create an empty list in which all combinations will be stored
-tested_sequences_combinations_FULL = []
 
-# This will fill the list with all possible combinations of the Proteins
+# This will make a loop from 1 to X, with X being the total number of different sequence in the 2nd file
 for i in range(1, len(list_sequence_parts)+1):
 
-    els = [list(x) for x in itertools.combinations(list_sequence_parts, i)]
-    tested_sequences_combinations_FULL.extend(els)
+    # This will create a list with all possible combinations of sequences, with a max of i sequences (i is defined here above)
+    sequence_combination = [list(x) for x in itertools.combinations(list_sequence_parts, i)]
 
+    # Compute the weight of each combination
+    for combination in sequence_combination:
 
+        # Give 0 as default value for total weight
+        Total_Weight = 0
 
-print('All Combinations list : ')
-print(tested_sequences_combinations_FULL)
+        # For each sequence inside the combination
+        for sequence in combination:
 
+            # Add the weight of the sequence to the total weight of the combination
+            Total_Weight += function_molecular_weight(str(sequence))
 
+        #print('Molecular weight of combination : ' + str(combination) + ' - is = ' + str(Total_Weight))
 
-##########################################################
-# Compute the molecular weight of each combination
-##########################################################
+        # Check if the weight of that combination equals the weight of the complete protein (rounded at 4 decimal digits)
+        if round(Total_Weight, 4) == round(protein_molecular_weight, 4) :
 
-# For each combiantion
-for combination in tested_sequences_combinations_FULL :
-
-    # Give 0 as default value for total weight
-    Total_Weight = 0
-
-    # For each sequence inside the combination
-    for sequence in combination :
-
-        # Add the weight of the sequence to the total weight of the combination
-        Total_Weight += function_molecular_weight(str(sequence))
-
-
-    print('Molecular weight of combination : ' + str(combination) + ' - is = ' + str(Total_Weight))
+            print('This combination''s weight matches the protein weight : ')
+            print(combination)
+            print('With as weight : ' + str(round(protein_molecular_weight, 4)))
 
 
 
