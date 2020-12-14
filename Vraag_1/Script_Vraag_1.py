@@ -6,7 +6,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
 
 # We here define the name of the input file (= file that we will treat)
-file_in ='Fasta_test.fasta'
+file_in ='protein.fasta'
 
 # Here we define of the output file (= file that we will here create, containing the final results)
 file_out='Gene_seq_out_20201208.fasta'
