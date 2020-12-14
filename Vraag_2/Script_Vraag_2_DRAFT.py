@@ -13,6 +13,42 @@ file_1 ='protein.fasta'
 file_2 ='protein_fragments.fasta'
 
 
+
+##########################################################
+# Create a function to compute molecular weight
+##########################################################
+
+
+def function_molecular_weight(sequence_text):
+    # Here is a Python dictionary in which I stored the molecular weights listed in the above URL
+    weights = {
+        'A': 71.0788,
+        'R': 156.1875,
+        'N': 114.1038,
+        'D': 115.0886,
+        'C': 103.1388,
+        'E': 129.1155,
+        'Q': 128.1307,
+        'G': 57.0519,
+        'H': 137.1411,
+        'I': 113.1594,
+        'L': 113.1594,
+        'K': 128.1741,
+        'M': 131.1926,
+        'F': 147.1766,
+        'P': 97.1167,
+        'S': 87.0782,
+        'T': 101.1051,
+        'W': 186.2132,
+        'Y': 163.1760,
+        'V': 99.1326
+    }
+
+    # Here we compute the mass, using the weights of the dictionary
+    weight = sum(weights[p] for p in sequence_text)
+
+    return weight
+
 ##########################################################
 # Treat File 1
 ##########################################################
@@ -21,17 +57,13 @@ file_2 ='protein_fragments.fasta'
 for seq_record in SeqIO.parse(open(file_1, mode='r'), 'fasta'):
 
 
-    # Put the sequence in a "Protein Analysis" function that will enable us to analyse that protein sequence afterwards
-    X = ProteinAnalysis(str(seq_record.seq))
-
     # Compute Molecular weight for the protein sequence
-    seq_record.molecular_weight = X.molecular_weight()
-
+    protein_molecular_weight = function_molecular_weight(str(seq_record.seq))
 
 
 # Here we print the result -> The result seems far from the mass on the teachers' notes
-print("The protein is : " + seq_record.seq)
-print("The molecular weight of that protein is " + str(seq_record.molecular_weight))
+print("The protein is : " + str(seq_record.seq))
+print("The molecular weight of that protein is " + str(protein_molecular_weight))
 
 
 ##########################################################
@@ -72,6 +104,7 @@ for i in range(1, len(list_sequence_parts)+1):
     tested_sequences_combinations_FULL.extend(els)
 
 
+
 print('All Combinations list : ')
 print(tested_sequences_combinations_FULL)
 
@@ -90,11 +123,8 @@ for combination in tested_sequences_combinations_FULL :
     # For each sequence inside the combination
     for sequence in combination :
 
-        # Put the sequence in a "Protein Analysis" function that will enable us to analyse that protein sequence afterwards
-        X = ProteinAnalysis(sequence)
-
         # Add the weight of the sequence to the total weight of the combination
-        Total_Weight += X.molecular_weight()
+        Total_Weight += function_molecular_weight(str(sequence))
 
 
     print('Molecular weight of combination : ' + str(combination) + ' - is = ' + str(Total_Weight))
