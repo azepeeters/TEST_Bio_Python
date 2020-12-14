@@ -82,15 +82,15 @@ for seq_record in SeqIO.parse(open(file_2, mode='r'), 'fasta'):
 
 
 
-print('Total of unique sequence parts that could be used to re-build the protein  : ' + str(len(list_sequence_parts)))
+print('Total of unique fragments that could be used to re-build the protein  : ' + str(len(list_sequence_parts)))
 
-print('The list of these sequences is :')
+print('The list of these fragments is :')
 print(list_sequence_parts)
 
 
 
 ##########################################################
-# Generate all possible combinations of the sequences, and compute the weight of each combinations
+# Generate all possible combinations of the fragments, and compute the weight of each combinations
 #   For each combination, assess if its weight matches the total proteins weight
 ##########################################################
 
@@ -98,27 +98,28 @@ print(list_sequence_parts)
 import itertools
 
 
-# This will make a loop from 1 to X, with X being the total number of different sequence in the 2nd file
+# This will make a loop from 1 to X, with X being the total number of different fragments in the 2nd file
 for i in range(1, len(list_sequence_parts)+1):
 
-    # This will create a list with all possible combinations of sequences, with a max of i sequences (i is defined here above)
-    sequence_combination = [list(x) for x in itertools.combinations(list_sequence_parts, i)]
+    # printing which size of combinations is being tested here
+    print('Testing combinations of ' + str(i) + ' fragments')
+
+    # This will create a list with all possible combinations of fragments, with a max of i fragments (i is defined here above)
+    fragment_combination = [list(x) for x in itertools.combinations(list_sequence_parts, i)]
 
     # Compute the weight of each combination
-    for combination in sequence_combination:
+    for combination in fragment_combination:
 
         # Give 0 as default value for total weight
         Total_Weight = 0
 
-        # For each sequence inside the combination
-        for sequence in combination:
+        # Add the weight of each fragment in the combination to the Total_Weight
+        for fragment in combination:
 
             # Add the weight of the sequence to the total weight of the combination
-            Total_Weight += function_molecular_weight(str(sequence))
+            Total_Weight += function_molecular_weight(str(fragment))
 
-        #print('Molecular weight of combination : ' + str(combination) + ' - is = ' + str(Total_Weight))
-
-        # Check if the weight of that combination equals the weight of the complete protein (rounded at 4 decimal digits)
+        # Test if the Total_Weight of that combination equals the weight of the complete protein (rounded at 4 decimal digits)
         if round(Total_Weight, 4) == round(protein_molecular_weight, 4) :
 
             print('This combination''s weight matches the protein weight : ')
