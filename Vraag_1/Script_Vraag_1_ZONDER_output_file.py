@@ -1,5 +1,4 @@
 
-
 # At this step you import modules. Modules in Python are like "Apps" that enable you to perform some complex tasks without having to write thousands of line of code
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
@@ -20,6 +19,6 @@ for seq_record in SeqIO.parse(open(file_in, mode='r'), 'fasta'):
 
 
     # Here we print the result -> The result seems far from the mass on the teachers' notes
-    print("The protein is : " + seq_record.seq )
+    print("The protein ID is : " + seq_record.id )
+    print("The protein Sequence is : " + seq_record.seq)
     print("The molecular weight of that protein is " + str(seq_record.molecular_weight))
-
