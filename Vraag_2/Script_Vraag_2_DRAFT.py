@@ -57,35 +57,39 @@ def function_molecular_weight(sequence_text):
 for seq_record in SeqIO.parse(open(file_1, mode='r'), 'fasta'):
 
 
+    protein_sequence = str(seq_record.seq)
+
     # Compute Molecular weight for the protein sequence
-    protein_molecular_weight = function_molecular_weight(str(seq_record.seq))
+    protein_molecular_weight = function_molecular_weight(protein_sequence)
 
 
 # Here we print the result -> The result seems far from the mass on the teachers' notes
-print("The protein is : " + str(seq_record.seq))
+print("The protein is : " + protein_sequence)
 print("The molecular weight of that protein is " + str(protein_molecular_weight))
 
 
 ##########################################################
-# Treat File 2 : Insert sequence parts in a List
+# Treat File 2 : Insert all fragments in a List (only if they are relevant for the protein)
 ##########################################################
 
 
-# Define an empty list in which to insert Sequence parts
-list_sequence_parts = []
+# Define an empty list in which to insert relevant fragments
+list_relevant_fragments = []
 
-# Loop through all sequences in the 2nd input file to count the number of sequences in it
+# Loop through all fragments found in the 2nd input file
 for seq_record in SeqIO.parse(open(file_2, mode='r'), 'fasta'):
 
-    # For each sequence found, insert it in the lsit
-    list_sequence_parts.insert(0, str(seq_record.seq))
+    # Check if fragment is relevant by checking if it is found somewhere in the protein
+    if protein_sequence.find(str(seq_record.seq)) >= 0:
+
+        # For each relevant fragments found, insert it in the list
+        list_relevant_fragments.insert(0, str(seq_record.seq))
 
 
-
-print('Total of unique fragments that could be used to re-build the protein  : ' + str(len(list_sequence_parts)))
+print('Total of unique fragments that could be used to re-build the protein  : ' + str(len(list_relevant_fragments)))
 
 print('The list of these fragments is :')
-print(list_sequence_parts)
+print(list_relevant_fragments)
 
 
 
@@ -99,13 +103,13 @@ import itertools
 
 
 # This will make a loop from 1 to X, with X being the total number of different fragments in the 2nd file
-for i in range(1, len(list_sequence_parts)+1):
+for i in range(1, len(list_relevant_fragments)+1):
 
     # printing which size of combinations is being tested here
     print('Testing combinations of ' + str(i) + ' fragments')
 
     # This will create a list with all possible combinations of fragments, with a max of i fragments (i is defined here above)
-    fragment_combination = [list(x) for x in itertools.combinations(list_sequence_parts, i)]
+    fragment_combination = [list(x) for x in itertools.combinations(list_relevant_fragments, i)]
 
     # Compute the weight of each combination
     for combination in fragment_combination:
