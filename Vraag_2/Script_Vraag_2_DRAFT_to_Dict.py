@@ -1,0 +1,120 @@
+
+
+# At this step you import modules. Modules in Python are like "Apps" that enable you to perform some complex tasks without having to write thousands of line of code
+from Bio import SeqIO
+from Bio import SeqUtils
+from Bio.SeqUtils.ProtParam import ProteinAnalysis
+
+
+#
+file_1 ='protein.fasta'
+
+#
+file_2 ='protein_fragments.fasta'
+
+
+
+##########################################################
+# Create a function to compute molecular weight
+##########################################################
+
+
+def function_molecular_weight(sequence_text):
+    # Here is a Python dictionary in which I stored the molecular weights listed in the above URL
+    weights = {
+        'A': 71.0788,
+        'R': 156.1875,
+        'N': 114.1038,
+        'D': 115.0886,
+        'C': 103.1388,
+        'E': 129.1155,
+        'Q': 128.1307,
+        'G': 57.0519,
+        'H': 137.1411,
+        'I': 113.1594,
+        'L': 113.1594,
+        'K': 128.1741,
+        'M': 131.1926,
+        'F': 147.1766,
+        'P': 97.1167,
+        'S': 87.0782,
+        'T': 101.1051,
+        'W': 186.2132,
+        'Y': 163.1760,
+        'V': 99.1326
+    }
+
+    # Here we compute the mass, using the weights of the dictionary
+    weight = sum(weights[p] for p in sequence_text)
+
+    return weight
+
+##########################################################
+# Treat File 1
+##########################################################
+
+#
+for seq_record in SeqIO.parse(open(file_1, mode='r'), 'fasta'):
+
+
+    protein_sequence = str(seq_record.seq)
+
+    # Compute Molecular weight for the protein sequence
+    protein_molecular_weight = function_molecular_weight(protein_sequence)
+
+
+# Here we print the result -> The result seems far from the mass on the teachers' notes
+print("The protein is : " + protein_sequence)
+print("The molecular weight of that protein is " + str(protein_molecular_weight))
+
+
+##########################################################
+# Treat File 2 : Insert all fragments in a List (only if they are relevant for the protein)
+##########################################################
+
+
+# Define an empty list in which to insert relevant fragments
+list_relevant_fragments = []
+
+# Loop through all fragments found in the 2nd input file
+for seq_record in SeqIO.parse(open(file_2, mode='r'), 'fasta'):
+
+    # Check if fragment is relevant by checking if it is found somewhere in the protein
+    if protein_sequence.find(str(seq_record.seq)) >= 0:
+
+        # For each relevant fragments found, insert it in the list
+        list_relevant_fragments.insert(0, str(seq_record.seq))
+
+
+print('Total of unique fragments that could be used to re-build the protein  : ' + str(len(list_relevant_fragments)))
+
+print('The list of these fragments is :')
+print(list_relevant_fragments)
+
+dict_relevant_fragments = { i : list_relevant_fragments[i] for i in range(0, len(list_relevant_fragments) ) }
+
+print(dict_relevant_fragments)
+
+# Multiply every value in my_dict by 2
+for key in dict_relevant_fragments:
+    dict_relevant_fragments[key] = function_molecular_weight(str(dict_relevant_fragments[key]))
+
+print(dict_relevant_fragments)
+
+sum_weight = 0
+
+for key in dict_relevant_fragments:
+
+    sum_weight += dict_relevant_fragments[key]
+
+print(sum_weight)
+
+import pandas as pd
+
+df = pd.DataFrame(data=dict_relevant_fragments, index=[0])
+
+df = (df.T)
+
+print (df)
+
+df.to_excel('dict1.xlsx')
