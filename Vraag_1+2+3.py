@@ -161,9 +161,6 @@ print('VRAAG 3 :')
 
 def check_protein_match(protein, fragment_list, matching_fragment_list):
 
-    # Remove fragments already matched
-    fragment_list = [i for i in fragment_list if i not in matching_fragment_list]
-
     # Stop if the protein was completely rebuilt
     if len(protein) == 0 :
 
@@ -172,19 +169,22 @@ def check_protein_match(protein, fragment_list, matching_fragment_list):
     # Move on if still any part of the protein to find
     else:
 
-        # Test for all the fragments in the list
+        # Test for all the fragments remaining in the list
         for fragment in fragment_list:
 
             # Does the protein start with that fragment?
             if protein.startswith(str(fragment)) == True:
 
-                # Add the matching fragment to the list
+                # Add the matching fragment to the list of matching fragments
                 matching_fragment_list.insert(len(matching_fragment_list), str(fragment))
+                
+                # Remove the matched fragment from the list of fragments to test
+                fragment_list.remove(fragment)
 
                 # Remove the fragment found from the protein-characters
                 protein = protein[len(str(fragment)):]
 
-                # Apply the same function to the remaining parts
+                # Apply the same function to the remaining parts : the remaining parts of the 
                 check_protein_match(protein, fragment_list, matching_fragment_list)
 
 
@@ -195,7 +195,7 @@ def check_protein_match(protein, fragment_list, matching_fragment_list):
 
 for combination in combinations_with_same_weight:
 
-    # Make an empty list to start with
+    # Make an empty list in which we will store the fragments that are matched with the protein
     matching_fragment_list = []
 
     # Test the combination
