@@ -7,10 +7,10 @@ from Bio.SeqUtils.ProtParam import ProteinAnalysis
 
 
 #
-file_1 ='protein.fasta'
+file_1 ='short_protein.fasta'
 
 #
-file_2 ='protein_fragments.fasta'
+file_2 ='short_protein_fragments.fasta'
 
 
 
