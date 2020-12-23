@@ -1,13 +1,7 @@
 
 
 from Bio import SeqIO
-from Bio.SeqIO import SeqRecord
-from Bio.Seq import Seq
-from Bio import SeqUtils
 
-
-from functools import reduce
-import operator
 
 
 
