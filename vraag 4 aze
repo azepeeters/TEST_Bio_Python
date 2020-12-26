@@ -1,0 +1,53 @@
+##########################################################
+# For each PROTEIN in the input file : list all tRNA combinations (only if less then 5000 combinations)
+##########################################################
+
+#
+def to_trna(file):
+    for seq_record in SeqIO.parse(open(sequence_file, mode='r'), 'fasta'):
+        
+        protein_sequence = str(seq_record.seq)
+
+    # Give start value of 1
+    possible_combinations = 1
+
+    # Compute the total number of possible combinations of tRNA for the protein sequence
+    for p in protein_sequence :
+
+        # Multiply the value of each loop with the output value of the previous loop
+        possible_combinations *= len(table[p])
+
+
+    print("The protein sequence is : " + protein_sequence)
+    print("The number of possible tRNA combinations is : " + str(possible_combinations))
+
+
+    ##########################################################
+    # Write error message if more then 5000 combinations
+    ##########################################################
+
+
+    #
+    if possible_combinations > 5000 :
+
+        print('More then 5000 tRNA combinations : we will not go further')
+
+    else :
+
+        print('Protein sequence with at most 5000 tRNA combinations : we WILL go further to list these tRNA combinations')
+
+        ##########################################################
+        # List all possible tRNA combinations
+        ##########################################################
+
+        # Dit module gebruiken om alle mogelijke combinaties te genereren
+        from itertools import product
+
+        # Compute the tRNA-list version of the protein sequence
+        res = [table[p] for p in protein_sequence]
+
+        print('The tRNA of the protein sequence is : ')
+        print(res)
+
+        print('The list of tRNA combinations for the protein sequence is : ')
+        print(list(product(*res)))
